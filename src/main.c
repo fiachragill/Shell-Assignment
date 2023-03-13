@@ -44,10 +44,12 @@ int main (int argc, char ** argv)
             
                 /* else pass command onto OS (or in this instance, print them out) */
                 arg = args;
+                /*
                 while (*arg) {
                     fprintf(stdout,"%s ",*arg++);
                     fputs ("\n", stdout);
-                }
+                } 
+                */
             }
         }
     }
