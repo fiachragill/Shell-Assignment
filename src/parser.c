@@ -8,60 +8,51 @@
 // This code is adapted from "Building a Simple Shell in C" by Stephen Brennan:
 // https://brennan.io/2015/01/16/write-a-shell-in-c/
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "parser.h"
 
+// Certainly! Here's an example of a command parser function that you could use to tokenize arguments in your shell program. This function is based on an online tutorial from GeeksforGeeks (https://www.geeksforgeeks.org/making-linux-shell-c/) and has been slightly modified to improve its readability.
+
 // Tokenize the input string and populate the command struct
-void parse_input(const char* input, Command* command) {
-    char* input_copy = strdup(input); // create a non-const copy
-    char* token;
-    int i = 0;
+/**
+ * This function parses a command string into arguments
+ * 
+ * @param command a string containing the command to parse
+ * @return an array of strings containing the parsed arguments, with the last element set to NULL
+ */
+char** parse_command(char* command) {
 
-    // Initialize the command struct
-    command->background = false;
-    command->argc = 0;
+    int buffer_size = 64;
+    int position = 0;
+    char** arguments = malloc(buffer_size * sizeof(char*));
+    char* argument;
 
-    // Tokenize the input string
-    token = strtok(input_copy, " ");
+    if (!arguments) {
+        fprintf(stderr, "Memory allocation error.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    // Loop through the tokens
-    while (token != NULL) {
-        // Check if the token is a special character
-        if (strcmp(token, "|") == 0) {
-            command->pipe = true;
-        }
-        else if (strcmp(token, ">") == 0) {
-            command->redirect = true;
-        }
-        else if (strcmp(token, "&") == 0) {
-            command->background = true;
-        }
-        // Otherwise, add the token to the command struct
-        else {
-            if (i < MAX_ARGS) {
-                command->args[i] = token;
-                i++;
-            }
-            else {
-                fprintf(stderr, "Too many arguments. Ignoring: %s\n", token);
+    argument = strtok(command, " \t\n");
+    while (argument != NULL) {
+        arguments[position] = argument;
+        position++;
+
+        if (position >= buffer_size) {
+            buffer_size += 64;
+            arguments = realloc(arguments, buffer_size * sizeof(char*));
+
+            if (!arguments) {
+                fprintf(stderr, "Memory allocation error.\n");
+                exit(EXIT_FAILURE);
             }
         }
 
-        // Get the next token
-        token = strtok(NULL, " ");
+        argument = strtok(NULL, " \t\n");
     }
 
-    // Set the argument count
-    command->argc = i;
-
-    // Set the last argument to NULL
-    if (i < MAX_ARGS) {
-        command->args[i] = NULL;
-    }
-
-    // Free the input copy
-    free(input_copy);
+    arguments[position] = NULL;
+    return arguments;
 }

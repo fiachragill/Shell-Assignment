@@ -8,25 +8,12 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <stdbool.h>
+/**
+ * This function parses a command string into arguments
+ * 
+ * @param command a string containing the command to parse
+ * @return an array of strings containing the parsed arguments, with the last element set to NULL
+ */
+char** parse_command(char* command);
 
-// Maximum number of arguments allowed in a command line
-#define MAX_ARGS 20
-// Maximum length of an argument
-#define MAX_ARG_LEN 50
-// Maximum length of the input string
-#define MAX_INPUT_LEN 200
-
-// Struct to hold the parsed command line input
-typedef struct {
-    char* args[MAX_ARGS];
-    int argc;
-    bool background;
-    bool pipe;
-    bool redirect;
-} Command;
-
-// Parse the input string into a Command struct
-void parse_input(const char* input, Command* command);
-
-#endif
+#endif /* PARSER_H */
