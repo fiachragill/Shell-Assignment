@@ -42,14 +42,13 @@ int main (int argc, char ** argv)
                 if (!strcmp(args[0],"quit"))   // "quit" command
                     break;                     // break out of 'while' loop
             
-                /* else pass command onto OS (or in this instance, print them out) */
+                /* else pass command onto OS */
                 arg = args;
-                /*
+
                 while (*arg) {
                     fprintf(stdout,"%s ",*arg++);
                     fputs ("\n", stdout);
-                } 
-                */
+                }
             }
         }
     }
